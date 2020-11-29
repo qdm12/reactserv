@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"sync"
 
 	"github.com/qdm12/golibs/logging"
@@ -15,18 +16,22 @@ var (
 
 func New(rootPath string, oldToNew map[string]string, logger logging.Logger) (fs http.FileSystem, err error) {
 	memFS := memFS{
-		mapping: make(map[string]memFSElement),
-		mu:      &sync.RWMutex{},
-		logger:  logger,
+		mapping:  make(map[string]memFSElement),
+		mu:       &sync.RWMutex{},
+		logger:   logger,
+		rootPath: filepath.Clean(rootPath),
+		oldToNew: oldToNew,
 	}
-	err = memFS.load(rootPath, oldToNew)
+	err = memFS.load()
 	return memFS, err
 }
 
 type memFS struct {
-	mapping map[string]memFSElement // key is the relative path
-	mu      *sync.RWMutex           // pointer to respect value receiver for Open method
-	logger  logging.Logger
+	mapping  map[string]memFSElement // key is the relative path
+	mu       *sync.RWMutex           // pointer to respect value receiver for Open method
+	logger   logging.Logger
+	rootPath string
+	oldToNew map[string]string
 }
 
 func (fs memFS) Open(name string) (file http.File, err error) {

@@ -15,10 +15,10 @@ var (
 	ErrLoading = errors.New("cannot load files in memory")
 )
 
-func (fs *memFS) load(rootPath string, oldToNew map[string]string) (err error) {
+func (fs *memFS) load() (err error) {
 	newMapping := make(map[string]memFSElement)
-	walkFn := makeWalkFn(newMapping, rootPath, oldToNew, fs.logger)
-	if err := filepath.Walk(rootPath, walkFn); err != nil {
+	walkFn := makeWalkFn(newMapping, fs.rootPath, fs.oldToNew, fs.logger)
+	if err := filepath.Walk(fs.rootPath, walkFn); err != nil {
 		return fmt.Errorf("%w: %s", ErrLoading, err)
 	}
 	fs.mu.Lock()
@@ -29,7 +29,6 @@ func (fs *memFS) load(rootPath string, oldToNew map[string]string) (err error) {
 
 func makeWalkFn(mapping map[string]memFSElement, rootPath string,
 	oldToNew map[string]string, logger logging.Logger) filepath.WalkFunc {
-	rootPath = filepath.Clean(rootPath)
 	return func(path string, info os.FileInfo, err error) (newErr error) {
 		if err != nil {
 			return err // fails if we encounter any error previously
