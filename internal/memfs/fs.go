@@ -7,46 +7,73 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
+
+	"github.com/qdm12/golibs/logging"
 )
 
 var (
 	ErrFileNotFound = errors.New("file not found")
 )
 
-func New(rootPath string, oldToNew map[string]string) (fs http.FileSystem, err error) {
-	memFS := memFS{}
-	err = filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
+func New(rootPath string, oldToNew map[string]string, logger logging.Logger) (fs http.FileSystem, err error) {
+	memFS := memFS{
+		m:      make(map[string]http.File),
+		logger: logger,
+	}
+	err = filepath.Walk(rootPath, makeWalkFn(memFS, rootPath, oldToNew, logger))
+	return memFS, err
+}
+
+func makeWalkFn(memFS memFS, rootPath string,
+	oldToNew map[string]string, logger logging.Logger) filepath.WalkFunc {
+	rootPath = filepath.Clean(rootPath)
+	return func(path string, info os.FileInfo, err error) (newErr error) {
 		if err != nil {
 			return err // fails if we encounter any error previously
 		}
 		stat, err := os.Stat(path)
 		if err != nil {
 			return err
-		} else if stat.IsDir() {
+		}
+
+		relativePath := strings.TrimPrefix(path, rootPath)
+
+		if stat.IsDir() {
+			memDir := &inMemoryDir{
+				Name: filepath.Base(relativePath),
+			}
+			memFS.m[relativePath] = memDir
 			return nil
 		}
-		data, err := ioutil.ReadFile(path)
+
+		memFile := &inMemoryFile{
+			Name: filepath.Base(relativePath),
+		}
+		memFile.data, err = ioutil.ReadFile(path)
 		if err != nil {
 			return err
 		}
-		data = processDataSpecificPath(path, data)
-		data = processData(data, oldToNew)
-		memFile := &InMemoryFile{
-			Name: path,
-			data: data,
-			fs:   memFS,
-		}
-		memFS[path] = memFile
+		memFile.data = processDataSpecificPath(relativePath, memFile.data)
+		memFile.data = processData(memFile.data, oldToNew)
+
+		memFS.m[relativePath] = memFile
+
+		logger.Info("loaded %s", relativePath)
+
 		return nil
-	})
-	return memFS, err
+	}
 }
 
-type memFS map[string]http.File
+type memFS struct {
+	m      map[string]http.File
+	logger logging.Logger
+}
 
 func (fs memFS) Open(name string) (file http.File, err error) {
-	file, ok := fs[name]
+	file, ok := fs.m[name]
 	if !ok {
+		fs.logger.Warn("%s: %q", ErrFileNotFound, name)
 		return nil, fmt.Errorf("%w: %q", ErrFileNotFound, name)
 	}
 	return file, nil

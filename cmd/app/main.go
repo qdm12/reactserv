@@ -73,7 +73,8 @@ func _main(ctx context.Context, _ []string) int {
 		"/static/":       rootURL + "/static/",
 		"/manifest.json": rootURL + "/manifest.json",
 	}
-	memFS, err := memfs.New("TODO", oldToNew)
+	memFSLogger := logger.WithPrefix("memory filesystem: ")
+	memFS, err := memfs.New("./srv", oldToNew, memFSLogger)
 	if err != nil {
 		logger.Error(err)
 		return 1

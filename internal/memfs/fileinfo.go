@@ -6,11 +6,14 @@ import (
 )
 
 // Implements os.FileInfo.
-type InMemoryFileInfo struct{ file *InMemoryFile }
+type inMemoryFileInfo struct {
+	name string
+	size int64
+}
 
-func (s *InMemoryFileInfo) Name() string       { return s.file.Name }
-func (s *InMemoryFileInfo) Size() int64        { return int64(len(s.file.data)) }
-func (s *InMemoryFileInfo) Mode() os.FileMode  { return os.ModeTemporary }
-func (s *InMemoryFileInfo) ModTime() time.Time { return time.Time{} }
-func (s *InMemoryFileInfo) IsDir() bool        { return false }
-func (s *InMemoryFileInfo) Sys() interface{}   { return nil }
+func (i *inMemoryFileInfo) Name() string       { return i.name }
+func (i *inMemoryFileInfo) Size() int64        { return i.size }
+func (i *inMemoryFileInfo) Mode() os.FileMode  { return os.ModeTemporary }
+func (i *inMemoryFileInfo) ModTime() time.Time { return time.Time{} }
+func (i *inMemoryFileInfo) IsDir() bool        { return false }
+func (i *inMemoryFileInfo) Sys() interface{}   { return nil }

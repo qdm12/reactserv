@@ -1,6 +1,8 @@
-# reactserv
+# Reactserv
 
-*SHORT_DESCRIPTION*
+**WORK IN PROGRESS**
+
+*HTTP server to serve React static files from memory. You can also set the root URL.*
 
 <img height="200" src="https://raw.githubusercontent.com/qdm12/reactserv/master/title.svg?sanitize=true">
 
@@ -17,15 +19,18 @@
 
 ## Features
 
+- Reads the static React files from disk and serves them from memory
+- Modify in-memory files with the `ROOT_URL` set, so using a reverse proxy is easier
 - Compatible with `amd64`, `386`, `arm64`, `arm32v7`, `arm32v6`, `ppc64le` and `s390x` CPU architectures
 - [Docker image tags and sizes](https://hub.docker.com/r/qmcgaw/reactserv/tags)
 
 ## Setup
 
+1. Place your **compiled** React code in a directory, for example `/yourpath/react`.
 1. Use the following command:
 
     ```sh
-    docker run -d qmcgaw/reactserv
+    docker run -d -p 8000:8000/tcp -v /yourpath/react:/srv:ro qmcgaw/reactserv
     ```
 
     You can also use [docker-compose.yml](https://github.com/qdm12/reactserv/blob/master/docker-compose.yml) with:
@@ -91,6 +96,9 @@
 1. See [Contributing](https://github.com/qdm12/reactserv/master/.github/CONTRIBUTING.md) for more information on how to contribute to this repository.
 
 ## TODOs
+
+- Fix operation for index.html and directories
+- Way to reload files into memory, maybe periodically?
 
 ## License
 

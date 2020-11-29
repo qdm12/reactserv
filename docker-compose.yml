@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 services:
   reactserv:
     build: .
@@ -6,7 +6,9 @@ services:
     container_name: reactserv
     ports:
       - 8000:8000/tcp
+    volumes:
+      - ./react:/srv:ro
     environment:
       - TZ=America/Montreal
+      - ROOT_URL=/
     restart: always
-

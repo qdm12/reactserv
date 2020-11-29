@@ -1,32 +1,34 @@
 package memfs
 
 import (
+	"fmt"
 	"io"
 	"os"
 )
 
 // Implements os.File.
-type InMemoryFile struct {
-	at   int64
+type inMemoryFile struct {
 	Name string
 	data []byte
-	fs   memFS
+	at   int64
 }
 
-func (f *InMemoryFile) Close() error               { return nil }
-func (f *InMemoryFile) Stat() (os.FileInfo, error) { return &InMemoryFileInfo{f}, nil }
+func (f *inMemoryFile) Close() error { return nil }
 
-func (f *InMemoryFile) Readdir(count int) ([]os.FileInfo, error) {
-	res := make([]os.FileInfo, len(f.fs))
-	i := 0
-	for _, file := range f.fs {
-		res[i], _ = file.Stat()
-		i++
-	}
-	return res, nil
+func (f *inMemoryFile) Stat() (os.FileInfo, error) {
+	return &inMemoryFileInfo{
+		name: f.Name,
+		size: int64(len(f.data)),
+	}, nil
 }
 
-func (f *InMemoryFile) Read(b []byte) (int, error) {
+func (f *inMemoryFile) Readdir(count int) ([]os.FileInfo, error) {
+	fmt.Println("file Readdir")
+	return nil, nil
+}
+
+func (f *inMemoryFile) Read(b []byte) (int, error) {
+	fmt.Println("file read", f.Name)
 	i := 0
 	for f.at < int64(len(f.data)) && i < len(b) {
 		b[i] = f.data[f.at]
@@ -36,7 +38,8 @@ func (f *InMemoryFile) Read(b []byte) (int, error) {
 	return i, nil
 }
 
-func (f *InMemoryFile) Seek(offset int64, whence int) (int64, error) {
+func (f *inMemoryFile) Seek(offset int64, whence int) (int64, error) {
+	fmt.Println("file seek")
 	switch whence {
 	case io.SeekStart:
 		f.at = offset
