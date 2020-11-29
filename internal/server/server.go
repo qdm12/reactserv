@@ -8,7 +8,6 @@ import (
 
 	"github.com/qdm12/golibs/logging"
 	"github.com/qdm12/reactserv/internal/models"
-	"github.com/qdm12/reactserv/internal/processor"
 )
 
 type Server interface {
@@ -22,8 +21,8 @@ type server struct {
 }
 
 func New(address, rootURL string, logger logging.Logger,
-	buildInfo models.BuildInformation, proc processor.Processor) Server {
-	handler := newHandler(rootURL, logger, buildInfo, proc)
+	memFS http.FileSystem, buildInfo models.BuildInformation) Server {
+	handler := newHandler(rootURL, logger, memFS, buildInfo)
 	return &server{
 		address: address,
 		logger:  logger,

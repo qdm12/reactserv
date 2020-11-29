@@ -9,13 +9,11 @@ import (
 	"syscall"
 
 	_ "github.com/lib/pq"
-	"github.com/qdm12/golibs/crypto"
 	"github.com/qdm12/golibs/logging"
-	"github.com/qdm12/reactserv/internal/data"
 	"github.com/qdm12/reactserv/internal/health"
+	"github.com/qdm12/reactserv/internal/memfs"
 	"github.com/qdm12/reactserv/internal/models"
 	"github.com/qdm12/reactserv/internal/params"
-	"github.com/qdm12/reactserv/internal/processor"
 	"github.com/qdm12/reactserv/internal/server"
 	"github.com/qdm12/reactserv/internal/splash"
 )
@@ -70,22 +68,23 @@ func _main(ctx context.Context, _ []string) int {
 		logger.Error(err)
 		return 1
 	}
-	db, err := setupDatabase(paramsReader, logger)
+
+	oldToNew := map[string]string{
+		"/static/":       rootURL + "/static/",
+		"/manifest.json": rootURL + "/manifest.json",
+	}
+	memFS, err := memfs.New("TODO", oldToNew)
 	if err != nil {
 		logger.Error(err)
 		return 1
 	}
-	defer db.Close()
 
 	wg := &sync.WaitGroup{}
 	defer wg.Wait()
 
-	crypto := crypto.NewCrypto()
-	proc := processor.NewProcessor(db, crypto)
-
 	serverLogger := logger.WithPrefix("http server: ")
 	address := fmt.Sprintf("0.0.0.0:%d", listeningPort)
-	server := server.New(address, rootURL, serverLogger, buildInfo, proc)
+	server := server.New(address, rootURL, serverLogger, memFS, buildInfo)
 	wg.Add(1)
 	go server.Run(ctx, wg)
 
@@ -120,22 +119,4 @@ func createLogger(paramsReader params.Reader) (logger logging.Logger, err error)
 		return nil, err
 	}
 	return logging.NewLogger(encoding, level)
-}
-
-func setupDatabase(paramsReader params.Reader, logger logging.Logger) (db data.Database, err error) {
-	databaseType := "memory"
-	switch databaseType { // TODO env variable
-	case "memory":
-		return data.NewMemory()
-	case "json":
-		return data.NewJSON("data.json")
-	case "postgres":
-		dbHost, dbUser, dbPassword, dbName, err := paramsReader.GetDatabaseDetails()
-		if err != nil {
-			return nil, err
-		}
-		return data.NewPostgres(dbHost, dbUser, dbPassword, dbName, logger)
-	default:
-		return nil, fmt.Errorf("database type %q not supported", databaseType)
-	}
 }
