@@ -48,7 +48,8 @@ ENV TZ=America/Montreal \
     LOG_ENCODING=console \
     LOG_LEVEL=info \
     LISTENING_PORT=8000 \
-    ROOT_URL=/
+    ROOT_URL=/ \
+    ROOT_DIR=srv
 ENTRYPOINT ["/app"]
 HEALTHCHECK --interval=10s --timeout=5s --start-period=5s --retries=2 CMD ["/app","healthcheck"]
 USER 1000

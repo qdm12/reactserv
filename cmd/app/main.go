@@ -68,13 +68,18 @@ func _main(ctx context.Context, _ []string) int {
 		logger.Error(err)
 		return 1
 	}
+	rootDir, err := paramsReader.GetRootDir()
+	if err != nil {
+		logger.Error(err)
+		return 1
+	}
 
 	oldToNew := map[string]string{
 		"/static/":       rootURL + "/static/",
 		"/manifest.json": rootURL + "/manifest.json",
 	}
 	memFSLogger := logger.WithPrefix("memory filesystem: ")
-	memFS, err := memfs.New("./srv", oldToNew, memFSLogger)
+	memFS, err := memfs.New(rootDir, oldToNew, memFSLogger)
 	if err != nil {
 		logger.Error(err)
 		return 1

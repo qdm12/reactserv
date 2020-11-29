@@ -49,6 +49,7 @@
 | `LOG_LEVEL` | `info` | `debug`, `info`, `warning`, `error` | Logging level |
 | `LISTENING_PORT` | `8000` | Integer between `1` and `65535` | Internal listening TCP port |
 | `ROOT_URL` | `/` | URL path *string* | URL path, used if behind a reverse proxy |
+| `ROOT_DIR` | `srv` | Absolute or relative file path | Root filesystem path to read files from |
 | `TZ` | `America/Montreal` | *string* | Timezone |
 
 ## Development

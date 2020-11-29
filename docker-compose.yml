@@ -11,4 +11,5 @@ services:
     environment:
       - TZ=America/Montreal
       - ROOT_URL=/
+      - ROOT_DIR=srv
     restart: always
