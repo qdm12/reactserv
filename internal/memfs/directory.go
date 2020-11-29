@@ -1,7 +1,6 @@
 package memfs
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -19,16 +18,13 @@ func (d *inMemoryDir) Stat() (os.FileInfo, error) {
 }
 
 func (d *inMemoryDir) Readdir(count int) ([]os.FileInfo, error) {
-	fmt.Println("dir readdir")
 	return nil, nil
 }
 
 func (d *inMemoryDir) Read(b []byte) (int, error) {
-	fmt.Println("dir read")
 	return 0, nil
 }
 
 func (d *inMemoryDir) Seek(offset int64, whence int) (int64, error) {
-	fmt.Println("dir seek")
 	return 0, nil
 }

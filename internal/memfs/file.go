@@ -1,7 +1,6 @@
 package memfs
 
 import (
-	"fmt"
 	"io"
 	"os"
 )
@@ -26,12 +25,10 @@ func (f *inMemoryFile) Stat() (os.FileInfo, error) {
 }
 
 func (f *inMemoryFile) Readdir(count int) ([]os.FileInfo, error) {
-	fmt.Println("file Readdir")
 	return nil, nil
 }
 
 func (f *inMemoryFile) Read(b []byte) (int, error) {
-	fmt.Println("file read", f.Name)
 	i := 0
 	for f.at < int64(len(f.data)) && i < len(b) {
 		b[i] = f.data[f.at]
@@ -42,7 +39,6 @@ func (f *inMemoryFile) Read(b []byte) (int, error) {
 }
 
 func (f *inMemoryFile) Seek(offset int64, whence int) (int64, error) {
-	fmt.Println("file seek")
 	switch whence {
 	case io.SeekStart:
 		f.at = offset
