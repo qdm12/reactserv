@@ -18,7 +18,7 @@ var (
 
 func New(rootPath string, oldToNew map[string]string, logger logging.Logger) (fs http.FileSystem, err error) {
 	memFS := memFS{
-		m:      make(map[string]http.File),
+		m:      make(map[string]memFSElement),
 		logger: logger,
 	}
 	err = filepath.Walk(rootPath, makeWalkFn(memFS, rootPath, oldToNew, logger))
@@ -45,24 +45,28 @@ func makeWalkFn(memFS memFS, rootPath string,
 		}
 
 		if stat.IsDir() {
-			memDir := &inMemoryDir{
-				Name: filepath.Base(relativePath),
+			memDir := memFSElement{
+				name:    filepath.Base(relativePath),
+				modTime: stat.ModTime(),
+				isDir:   true,
 			}
 			memFS.m[relativePath] = memDir
 			logger.Info("loading directory %s", relativePath)
 			return nil
 		}
 
-		memFile := &inMemoryFile{
-			Name: filepath.Base(relativePath),
-		}
-		memFile.data, err = ioutil.ReadFile(path)
+		data, err := ioutil.ReadFile(path)
 		if err != nil {
 			return err
 		}
-		memFile.data = processDataSpecificPath(relativePath, memFile.data)
-		memFile.data = processData(memFile.data, oldToNew)
+		data = processDataSpecificPath(relativePath, data)
+		data = processData(data, oldToNew)
 
+		memFile := memFSElement{
+			name:    filepath.Base(relativePath),
+			modTime: stat.ModTime(),
+			data:    data,
+		}
 		memFS.m[relativePath] = memFile
 		logger.Info("loaded file %s", relativePath)
 
@@ -71,15 +75,19 @@ func makeWalkFn(memFS memFS, rootPath string,
 }
 
 type memFS struct {
-	m      map[string]http.File
+	m      map[string]memFSElement // key is the relative path
 	logger logging.Logger
 }
 
 func (fs memFS) Open(name string) (file http.File, err error) {
-	file, ok := fs.m[name]
+	element, ok := fs.m[name]
 	if !ok {
-		fs.logger.Warn("%s: %q", ErrFileNotFound, name)
 		return nil, fmt.Errorf("%w: %q", ErrFileNotFound, name)
 	}
+	if element.isDir {
+		file = newInMemoryDirectory(element.name, element.modTime)
+		return file, nil
+	}
+	file = newInMemoryFile(element.data, element.name, element.modTime)
 	return file, nil
 }

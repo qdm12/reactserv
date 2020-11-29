@@ -3,13 +3,35 @@ package memfs
 import (
 	"io"
 	"os"
+	"time"
 )
+
+func newInMemoryFile(data []byte, name string, modTime time.Time) *inMemoryFile {
+	return &inMemoryFile{
+		fileInfo: inMemoryFileInfo{
+			name:    name,
+			size:    int64(len(data)),
+			modTime: modTime,
+		},
+		data: data,
+	}
+}
+
+func newInMemoryDirectory(name string, modTime time.Time) *inMemoryFile {
+	return &inMemoryFile{
+		fileInfo: inMemoryFileInfo{
+			name:    name,
+			modTime: modTime,
+			isDir:   true,
+		},
+	}
+}
 
 // Implements os.File.
 type inMemoryFile struct {
-	Name string
-	data []byte
-	at   int64
+	fileInfo inMemoryFileInfo
+	data     []byte
+	at       int64
 }
 
 func (f *inMemoryFile) Close() error {
@@ -18,16 +40,16 @@ func (f *inMemoryFile) Close() error {
 }
 
 func (f *inMemoryFile) Stat() (os.FileInfo, error) {
-	return &inMemoryFileInfo{
-		name: f.Name,
-		size: int64(len(f.data)),
-	}, nil
+	fileInfo := f.fileInfo
+	return &fileInfo, nil
 }
 
+// Readdir is never run.
 func (f *inMemoryFile) Readdir(count int) ([]os.FileInfo, error) {
 	return nil, nil
 }
 
+// Read only applies to files and not directories.
 func (f *inMemoryFile) Read(b []byte) (int, error) {
 	i := 0
 	for f.at < int64(len(f.data)) && i < len(b) {
@@ -38,6 +60,7 @@ func (f *inMemoryFile) Read(b []byte) (int, error) {
 	return i, nil
 }
 
+// Seek only applies to files and not directories.
 func (f *inMemoryFile) Seek(offset int64, whence int) (int64, error) {
 	switch whence {
 	case io.SeekStart:
