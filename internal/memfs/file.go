@@ -13,7 +13,10 @@ type inMemoryFile struct {
 	at   int64
 }
 
-func (f *inMemoryFile) Close() error { return nil }
+func (f *inMemoryFile) Close() error {
+	f.at = 0
+	return nil
+}
 
 func (f *inMemoryFile) Stat() (os.FileInfo, error) {
 	return &inMemoryFileInfo{

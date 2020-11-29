@@ -32,12 +32,17 @@ func makeWalkFn(memFS memFS, rootPath string,
 		if err != nil {
 			return err // fails if we encounter any error previously
 		}
+
+		path = filepath.Clean(path)
+		relativePath := strings.TrimPrefix(path, rootPath)
+		if len(relativePath) == 0 {
+			relativePath = "/"
+		}
+
 		stat, err := os.Stat(path)
 		if err != nil {
 			return err
 		}
-
-		relativePath := strings.TrimPrefix(path, rootPath)
 
 		if stat.IsDir() {
 			memDir := &inMemoryDir{
