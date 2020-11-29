@@ -49,6 +49,7 @@ func makeWalkFn(memFS memFS, rootPath string,
 				Name: filepath.Base(relativePath),
 			}
 			memFS.m[relativePath] = memDir
+			logger.Info("loading directory %s", relativePath)
 			return nil
 		}
 
@@ -63,8 +64,7 @@ func makeWalkFn(memFS memFS, rootPath string,
 		memFile.data = processData(memFile.data, oldToNew)
 
 		memFS.m[relativePath] = memFile
-
-		logger.Info("loaded %s", relativePath)
+		logger.Info("loaded file %s", relativePath)
 
 		return nil
 	}
