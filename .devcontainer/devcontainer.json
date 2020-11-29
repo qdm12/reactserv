@@ -1,5 +1,5 @@
 {
-    "name": "REPONAME_GITHUB-dev",
+    "name": "reactserv-dev",
     "dockerComposeFile": [
         "docker-compose.yml"
     ],

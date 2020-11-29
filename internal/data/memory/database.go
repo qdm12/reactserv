@@ -3,7 +3,7 @@ package memory
 import (
 	"sync"
 
-	"github.com/qdm12/REPONAME_GITHUB/internal/models"
+	"github.com/qdm12/reactserv/internal/models"
 )
 
 // Database is the JSON file implementation of the database store.

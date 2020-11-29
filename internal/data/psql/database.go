@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/qdm12/REPONAME_GITHUB/internal/data/errors"
 	"github.com/qdm12/golibs/crypto/random"
 	"github.com/qdm12/golibs/logging"
+	"github.com/qdm12/reactserv/internal/data/errors"
 )
 
 // Database is the Postgres implementation of the database store.

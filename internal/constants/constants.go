@@ -1,7 +1,7 @@
 package constants
 
 import (
-	"github.com/qdm12/REPONAME_GITHUB/internal/models"
+	"github.com/qdm12/reactserv/internal/models"
 )
 
 const (

@@ -1,9 +1,9 @@
 package processor
 
 import (
-	"github.com/qdm12/REPONAME_GITHUB/internal/data"
-	"github.com/qdm12/REPONAME_GITHUB/internal/models"
 	"github.com/qdm12/golibs/crypto"
+	"github.com/qdm12/reactserv/internal/data"
+	"github.com/qdm12/reactserv/internal/models"
 )
 
 // Processor has methods to process data and return results.

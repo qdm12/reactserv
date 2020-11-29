@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/qdm12/REPONAME_GITHUB/internal/data/errors"
-	"github.com/qdm12/REPONAME_GITHUB/internal/data/memory"
-	"github.com/qdm12/REPONAME_GITHUB/internal/models"
 	"github.com/qdm12/golibs/files"
+	"github.com/qdm12/reactserv/internal/data/errors"
+	"github.com/qdm12/reactserv/internal/data/memory"
+	"github.com/qdm12/reactserv/internal/models"
 )
 
 // Database is the JSON file implementation of the database store.

@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/qdm12/REPONAME_GITHUB/internal/models"
-	"github.com/qdm12/REPONAME_GITHUB/internal/processor"
 	"github.com/qdm12/golibs/logging"
+	"github.com/qdm12/reactserv/internal/models"
+	"github.com/qdm12/reactserv/internal/processor"
 )
 
 func newHandler(rootURL string, logger logging.Logger,

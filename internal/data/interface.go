@@ -1,11 +1,11 @@
 package data
 
 import (
-	"github.com/qdm12/REPONAME_GITHUB/internal/data/json"
-	"github.com/qdm12/REPONAME_GITHUB/internal/data/memory"
-	"github.com/qdm12/REPONAME_GITHUB/internal/data/psql"
-	"github.com/qdm12/REPONAME_GITHUB/internal/models"
 	"github.com/qdm12/golibs/logging"
+	"github.com/qdm12/reactserv/internal/data/json"
+	"github.com/qdm12/reactserv/internal/data/memory"
+	"github.com/qdm12/reactserv/internal/data/psql"
+	"github.com/qdm12/reactserv/internal/models"
 )
 
 type Database interface {

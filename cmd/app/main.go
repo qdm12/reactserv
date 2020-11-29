@@ -9,15 +9,15 @@ import (
 	"syscall"
 
 	_ "github.com/lib/pq"
-	"github.com/qdm12/REPONAME_GITHUB/internal/data"
-	"github.com/qdm12/REPONAME_GITHUB/internal/health"
-	"github.com/qdm12/REPONAME_GITHUB/internal/models"
-	"github.com/qdm12/REPONAME_GITHUB/internal/params"
-	"github.com/qdm12/REPONAME_GITHUB/internal/processor"
-	"github.com/qdm12/REPONAME_GITHUB/internal/server"
-	"github.com/qdm12/REPONAME_GITHUB/internal/splash"
 	"github.com/qdm12/golibs/crypto"
 	"github.com/qdm12/golibs/logging"
+	"github.com/qdm12/reactserv/internal/data"
+	"github.com/qdm12/reactserv/internal/health"
+	"github.com/qdm12/reactserv/internal/models"
+	"github.com/qdm12/reactserv/internal/params"
+	"github.com/qdm12/reactserv/internal/processor"
+	"github.com/qdm12/reactserv/internal/server"
+	"github.com/qdm12/reactserv/internal/splash"
 )
 
 //nolint:gochecknoglobals

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"net/http"
 
-	dataerr "github.com/qdm12/REPONAME_GITHUB/internal/data/errors"
-	"github.com/qdm12/REPONAME_GITHUB/internal/models"
+	dataerr "github.com/qdm12/reactserv/internal/data/errors"
+	"github.com/qdm12/reactserv/internal/models"
 )
 
 func (h *handler) getUserByID(w http.ResponseWriter, r *http.Request) {

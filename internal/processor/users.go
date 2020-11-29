@@ -1,7 +1,7 @@
 package processor
 
 import (
-	"github.com/qdm12/REPONAME_GITHUB/internal/models"
+	"github.com/qdm12/reactserv/internal/models"
 )
 
 func (p *processor) CreateUser(user models.User) error {

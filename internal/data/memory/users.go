@@ -3,8 +3,8 @@ package memory
 import (
 	"fmt"
 
-	"github.com/qdm12/REPONAME_GITHUB/internal/data/errors"
-	"github.com/qdm12/REPONAME_GITHUB/internal/models"
+	"github.com/qdm12/reactserv/internal/data/errors"
+	"github.com/qdm12/reactserv/internal/models"
 )
 
 func (db *Database) CreateUser(user models.User) (err error) {

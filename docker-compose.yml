@@ -1,9 +1,9 @@
 version: '3.7'
 services:
-  REPONAME_DOCKER:
+  reactserv:
     build: .
-    image: qmcgaw/REPONAME_DOCKER
-    container_name: REPONAME_DOCKER
+    image: qmcgaw/reactserv
+    container_name: reactserv
     ports:
       - 8000:8000/tcp
     environment:
