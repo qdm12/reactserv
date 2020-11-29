@@ -12,8 +12,9 @@ type inMemoryDir struct {
 
 func (d *inMemoryDir) Close() error { return nil }
 func (d *inMemoryDir) Stat() (os.FileInfo, error) {
-	return &inMemoryDirInfo{
-		name: d.Name,
+	return &inMemoryFileInfo{
+		name:  d.Name,
+		isDir: true,
 	}, nil
 }
 
