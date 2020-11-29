@@ -15,8 +15,8 @@ RUN go mod download 2>&1
 COPY .golangci.yml .
 COPY cmd/app/main.go cmd/app/main.go
 COPY internal ./internal
-# RUN go test ./...
-# RUN golangci-lint run --timeout=10m
+RUN go test ./...
+RUN golangci-lint run --timeout=10m
 ARG VERSION=unknown
 ARG BUILD_DATE="an unknown date"
 ARG COMMIT=unknown
@@ -40,8 +40,7 @@ LABEL \
     org.opencontainers.image.source="https://github.com/qdm12/reactserv" \
     org.opencontainers.image.title="reactserv" \
     org.opencontainers.image.description="HTTP React server in Go"
-COPY --chown=1000 index.html /srv/index.html
-COPY --chown=1000 index.html /srv/test/index.html
+COPY --chown=1000 srv/index.html /srv/index.html
 COPY --from=alpine --chown=1000 /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=alpine --chown=1000 /usr/share/zoneinfo /usr/share/zoneinfo
 ENV TZ=America/Montreal \
