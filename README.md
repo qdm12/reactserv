@@ -1,7 +1,5 @@
 # Reactserv
 
-**WORK IN PROGRESS**
-
 *HTTP server to serve React static files from memory. You can also set the root URL.*
 
 <img height="200" src="https://raw.githubusercontent.com/qdm12/reactserv/master/title.svg?sanitize=true">
@@ -98,8 +96,9 @@
 
 ## TODOs
 
-- Fix operation for index.html and directories
-- Way to reload files into memory, maybe periodically?
+- Reload files into memory using fsnotify and a timer (when fsnotify is not available)
+- Remove React helmet data tags from html headers
+- Authentication with OAuth or similar
 
 ## License
 
