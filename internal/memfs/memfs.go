@@ -1,6 +1,7 @@
 package memfs
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -14,24 +15,30 @@ var (
 	ErrFileNotFound = errors.New("file not found")
 )
 
-func New(rootPath string, oldToNew map[string]string, logger logging.Logger) (fs http.FileSystem, err error) {
-	memFS := memFS{
+type MemFS interface {
+	Open(name string) (file http.File, err error)
+	Watch(ctx context.Context, wg *sync.WaitGroup)
+}
+
+func New(rootPath string, oldToNew map[string]string, logger logging.Logger) (fs MemFS, err error) {
+	memFS := &memFS{
 		mapping:  make(map[string]memFSElement),
 		mu:       &sync.RWMutex{},
 		logger:   logger,
 		rootPath: filepath.Clean(rootPath),
 		oldToNew: oldToNew,
 	}
-	err = memFS.load()
+	err = memFS.loadAll()
 	return memFS, err
 }
 
 type memFS struct {
-	mapping  map[string]memFSElement // key is the relative path
-	mu       *sync.RWMutex           // pointer to respect value receiver for Open method
-	logger   logging.Logger
-	rootPath string
-	oldToNew map[string]string
+	mapping     map[string]memFSElement // key is the relative path
+	mu          *sync.RWMutex           // pointer to respect value receiver for Open method
+	logger      logging.Logger
+	rootPath    string
+	oldToNew    map[string]string
+	directories map[string]struct{} // key is the absolute path
 }
 
 func (fs memFS) Open(name string) (file http.File, err error) {

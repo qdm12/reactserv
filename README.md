@@ -19,6 +19,7 @@
 
 - Reads the static React files from disk and serves them from memory
 - Modify in-memory files with the `ROOT_URL` set, so using a reverse proxy is easier
+- Reloads files in memory on any file change (works on all platforms, and obviously Linux/Docker)
 - Compatible with `amd64`, `386`, `arm64`, `arm32v7`, `arm32v6`, `ppc64le` and `s390x` CPU architectures
 - [Docker image tags and sizes](https://hub.docker.com/r/qmcgaw/reactserv/tags)
 
@@ -96,7 +97,6 @@
 
 ## TODOs
 
-- Reload files into memory using fsnotify and a timer (when fsnotify is not available)
 - Remove React helmet data tags from html headers
 - Authentication with OAuth or similar
 

@@ -88,6 +88,8 @@ func _main(ctx context.Context, _ []string) int {
 	wg := &sync.WaitGroup{}
 	defer wg.Wait()
 
+	go memFS.Watch(ctx, wg)
+
 	serverLogger := logger.WithPrefix("http server: ")
 	address := fmt.Sprintf("0.0.0.0:%d", listeningPort)
 	server := server.New(address, rootURL, serverLogger, memFS, buildInfo)
