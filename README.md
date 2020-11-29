@@ -42,13 +42,8 @@
 | --- | --- | --- | --- |
 | `LOG_ENCODING` | `console` | `json`, `console` | Logging format |
 | `LOG_LEVEL` | `info` | `debug`, `info`, `warning`, `error` | Logging level |
-| `NODE_ID` | `-1` | Integer | Node ID for clusters |
 | `LISTENING_PORT` | `8000` | Integer between `1` and `65535` | Internal listening TCP port |
 | `ROOT_URL` | `/` | URL path *string* | URL path, used if behind a reverse proxy |
-| `SQL_HOST` | `postgres` | *string* | Database hostname |
-| `SQL_USER` | `postgres` | *string* | Database user |
-| `SQL_PASSWORD` | `postgres` | *string* | Database password |
-| `SQL_DBNAME` | `postgres` | *string* | Database name |
 | `TZ` | `America/Montreal` | *string* | Timezone |
 
 ## Development
@@ -96,17 +91,6 @@
 1. See [Contributing](https://github.com/qdm12/reactserv/master/.github/CONTRIBUTING.md) for more information on how to contribute to this repository.
 
 ## TODOs
-
-- Switch to Go's mock library
-- Use [Gox](https://github.com/mitchellh/gox)
-- Database
-    - Add database type environment variable
-    - Add bbolt as database option
-    - Add Redis interface in a kv package (as data)
-    - Build tag for database integration tests
-    - Unit tests with mocked
-    - Integration tests
-- Unit tests the server with httprecorder
 
 ## License
 
