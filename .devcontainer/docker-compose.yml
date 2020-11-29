@@ -17,6 +17,8 @@ services:
       # Kubernetes
       # - ~/.kube:/home/districter/.kube
       # - ~/.kube:/root/.kube
+    ports:
+      - 8000:8000/tcp
     environment:
       - TZ=America/Montreal
     cap_add:
