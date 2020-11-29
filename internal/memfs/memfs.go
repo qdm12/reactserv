@@ -15,23 +15,23 @@ var (
 
 func New(rootPath string, oldToNew map[string]string, logger logging.Logger) (fs http.FileSystem, err error) {
 	memFS := memFS{
-		m:      make(map[string]memFSElement),
-		mu:     &sync.RWMutex{},
-		logger: logger,
+		mapping: make(map[string]memFSElement),
+		mu:      &sync.RWMutex{},
+		logger:  logger,
 	}
 	err = memFS.load(rootPath, oldToNew)
 	return memFS, err
 }
 
 type memFS struct {
-	m      map[string]memFSElement // key is the relative path
-	mu     *sync.RWMutex           // pointer to respect value receiver for Open method
-	logger logging.Logger
+	mapping map[string]memFSElement // key is the relative path
+	mu      *sync.RWMutex           // pointer to respect value receiver for Open method
+	logger  logging.Logger
 }
 
 func (fs memFS) Open(name string) (file http.File, err error) {
 	fs.mu.RLock()
-	element, ok := fs.m[name]
+	element, ok := fs.mapping[name]
 	fs.mu.RUnlock()
 	if !ok {
 		return nil, fmt.Errorf("%w: %q", ErrFileNotFound, name)

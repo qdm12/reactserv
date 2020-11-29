@@ -22,7 +22,7 @@ func (fs *memFS) load(rootPath string, oldToNew map[string]string) (err error) {
 		return fmt.Errorf("%w: %s", ErrLoading, err)
 	}
 	fs.mu.Lock()
-	fs.m = newMapping
+	fs.mapping = newMapping
 	fs.mu.Unlock()
 	return nil
 }
