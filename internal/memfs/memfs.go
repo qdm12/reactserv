@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"path/filepath"
+	"regexp"
 	"sync"
 
 	"github.com/qdm12/golibs/logging"
@@ -20,7 +21,7 @@ type MemFS interface {
 	Watch(ctx context.Context, wg *sync.WaitGroup)
 }
 
-func New(rootPath string, oldToNew map[string]string, logger logging.Logger) (fs MemFS, err error) {
+func New(rootPath string, oldToNew map[*regexp.Regexp]string, logger logging.Logger) (fs MemFS, err error) {
 	memFS := &memFS{
 		mapping:  make(map[string]memFSElement),
 		mu:       &sync.RWMutex{},
@@ -37,7 +38,7 @@ type memFS struct {
 	mu          *sync.RWMutex           // pointer to respect value receiver for Open method
 	logger      logging.Logger
 	rootPath    string
-	oldToNew    map[string]string
+	oldToNew    map[*regexp.Regexp]string
 	directories map[string]struct{} // key is the absolute path
 }
 

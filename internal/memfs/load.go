@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/qdm12/golibs/logging"
@@ -30,7 +31,7 @@ func (fs *memFS) loadAll() (err error) {
 }
 
 func makeWalkFn(mapping map[string]memFSElement, directories map[string]struct{},
-	rootPath string, oldToNew map[string]string, logger logging.Logger) filepath.WalkFunc {
+	rootPath string, oldToNew map[*regexp.Regexp]string, logger logging.Logger) filepath.WalkFunc {
 	return func(path string, info os.FileInfo, err error) (newErr error) {
 		if err != nil {
 			return err // fails if we encounter any error previously
@@ -41,7 +42,7 @@ func makeWalkFn(mapping map[string]memFSElement, directories map[string]struct{}
 
 func loadSingle(path, rootPath string,
 	mapping map[string]memFSElement, directories map[string]struct{},
-	oldToNew map[string]string, logger logging.Logger) (err error) {
+	oldToNew map[*regexp.Regexp]string, logger logging.Logger) (err error) {
 	path = filepath.Clean(path)
 	relativePath := strings.TrimPrefix(path, rootPath)
 	if len(relativePath) == 0 {
