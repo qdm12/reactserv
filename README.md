@@ -20,6 +20,7 @@
 - Reads the static React files from disk and serves them from memory
 - Modify in-memory files with the `ROOT_URL` set, so using a reverse proxy is easier
 - Reloads files in memory on any file change (works on all platforms, and obviously Linux/Docker)
+- Remove data-react-helmet tags generated with `REMOVE_DATA_REACT_HELMET`
 - Compatible with `amd64`, `386`, `arm64`, `arm32v7`, `arm32v6`, `ppc64le` and `s390x` CPU architectures
 - [Docker image tags and sizes](https://hub.docker.com/r/qmcgaw/reactserv/tags)
 
@@ -49,6 +50,7 @@
 | `LISTENING_PORT` | `8000` | Integer between `1` and `65535` | Internal listening TCP port |
 | `ROOT_URL` | `/` | URL path *string* | URL path, used if behind a reverse proxy |
 | `ROOT_DIR` | `srv` | Absolute or relative file path | Root filesystem path to read files from |
+| `REMOVE_DATA_REACT_HELMET` | `on` | `on` or `off` | Remove `data-react-helmet` tags |
 | `TZ` | `America/Montreal` | *string* | Timezone |
 
 ## Development
@@ -98,6 +100,7 @@
 ## TODOs
 
 - Remove React helmet data tags from html headers
+- Add default favicon.ico
 - Authentication with OAuth or similar
 
 ## License
