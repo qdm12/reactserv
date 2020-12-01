@@ -2,18 +2,13 @@ package memfs
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"net/http"
+	"os"
 	"path/filepath"
 	"regexp"
 	"sync"
 
 	"github.com/qdm12/golibs/logging"
-)
-
-var (
-	ErrFileNotFound = errors.New("file not found")
 )
 
 type MemFS interface {
@@ -47,7 +42,7 @@ func (fs memFS) Open(name string) (file http.File, err error) {
 	element, ok := fs.mapping[name]
 	fs.mu.RUnlock()
 	if !ok {
-		return nil, fmt.Errorf("%w: %q", ErrFileNotFound, name)
+		return nil, os.ErrNotExist
 	}
 	if element.isDir {
 		file = newInMemoryDirectory(element.name, element.modTime)
