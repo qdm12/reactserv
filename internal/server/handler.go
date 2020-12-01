@@ -26,9 +26,12 @@ type handler struct {
 }
 
 func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	r.RequestURI = strings.TrimPrefix(r.RequestURI, h.rootURL)
-	h.logger.Info("%s %s %s", r.RemoteAddr, r.Method, r.RequestURI)
-	if strings.HasPrefix(r.RequestURI, "/v1/version") && r.Method == http.MethodGet {
+	h.logger.Info("%s %s %s", r.RemoteAddr, r.Method, r.URL.Path)
+	if !strings.HasPrefix(r.URL.Path, h.rootURL) {
+		return
+	}
+	r.URL.Path = strings.TrimPrefix(r.URL.Path, h.rootURL)
+	if strings.HasPrefix(r.URL.Path, "/v1/version") && r.Method == http.MethodGet {
 		h.getVersion(w)
 		return
 	}

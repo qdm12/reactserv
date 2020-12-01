@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"regexp"
 	"sync"
 	"syscall"
 
 	_ "github.com/lib/pq"
 	"github.com/qdm12/golibs/logging"
-	"github.com/qdm12/reactserv/internal/constants"
 	"github.com/qdm12/reactserv/internal/health"
 	"github.com/qdm12/reactserv/internal/memfs"
 	"github.com/qdm12/reactserv/internal/models"
@@ -70,15 +68,16 @@ func _main(ctx context.Context, _ []string) int {
 		logger.Error(err)
 		return 1
 	}
+	logger.Info("Using root URL: %s", rootURL)
 	rootDir, err := paramsReader.GetRootDir()
 	if err != nil {
 		logger.Error(err)
 		return 1
 	}
 
-	oldToNew := map[*regexp.Regexp]string{
-		constants.RegexStatic:       rootURL + "/static/",
-		constants.RegexManifestJSON: rootURL + "/manifest.json",
+	oldToNew := map[string]string{
+		"/static/":       rootURL + "/static/",
+		"/manifest.json": rootURL + "/manifest.json",
 	}
 	memFSLogger := logger.WithPrefix("memory filesystem: ")
 	memFS, err := memfs.New(rootDir, oldToNew, memFSLogger)
