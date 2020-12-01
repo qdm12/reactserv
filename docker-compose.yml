@@ -12,5 +12,4 @@ services:
       - TZ=America/Montreal
       - ROOT_URL=/
       - ROOT_DIR=srv
-      - REMOVE_DATA_REACT_HELMET=on
     restart: always

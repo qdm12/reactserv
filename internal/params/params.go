@@ -14,7 +14,6 @@ type Reader interface {
 	GetLoggerConfig() (encoding logging.Encoding, level logging.Level, err error)
 	GetRootURL(setters ...libparams.GetEnvSetter) (rootURL string, err error)
 	GetRootDir() (rootDir string, err error)
-	GetRemoveDataReactHelmet() (remove bool, err error)
 }
 
 type reader struct {
@@ -59,8 +58,4 @@ func (r *reader) GetRootDir() (rootDir string, err error) {
 		return "", fmt.Errorf("%w: %s", ErrIsNotDir, err)
 	}
 	return rootDir, nil
-}
-
-func (r *reader) GetRemoveDataReactHelmet() (remove bool, err error) {
-	return r.envParams.GetOnOff("REMOVE_DATA_REACT_HELMET", libparams.Default("on"))
 }

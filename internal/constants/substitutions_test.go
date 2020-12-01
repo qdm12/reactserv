@@ -32,15 +32,6 @@ func Test_Regex(t *testing.T) {
 			s:     "/manifest.json",
 			match: true,
 		},
-		"RegexDataReactHelmet mismatch": {
-			regex: RegexDataReactHelmet,
-			s:     "data-react-helmet=",
-		},
-		"RegexDataReactHelmet match": {
-			regex: RegexDataReactHelmet,
-			s:     ` data-react-helmet="true"`,
-			match: true,
-		},
 	}
 	for name, testCase := range testCases {
 		testCase := testCase

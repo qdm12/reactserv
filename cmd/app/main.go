@@ -75,18 +75,10 @@ func _main(ctx context.Context, _ []string) int {
 		logger.Error(err)
 		return 1
 	}
-	removeDataReactHelmet, err := paramsReader.GetRemoveDataReactHelmet()
-	if err != nil {
-		logger.Error(err)
-		return 1
-	}
 
 	oldToNew := map[*regexp.Regexp]string{
 		constants.RegexStatic:       rootURL + "/static/",
 		constants.RegexManifestJSON: rootURL + "/manifest.json",
-	}
-	if removeDataReactHelmet {
-		oldToNew[constants.RegexDataReactHelmet] = ""
 	}
 	memFSLogger := logger.WithPrefix("memory filesystem: ")
 	memFS, err := memfs.New(rootDir, oldToNew, memFSLogger)
